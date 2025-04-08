@@ -6,7 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.*;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.filter.ForwardedHeaderFilter;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
@@ -14,18 +17,29 @@ public class SecurityConfig {
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.addAllowedOrigin("https://d38gswnftydh5r.cloudfront.net");
-        corsConfig.addAllowedOrigin("http://localhost:3000");
-        corsConfig.addAllowedHeader("*"); // Sau specific: Authorization, Content-Type
-        corsConfig.addAllowedMethod("*");
+
+        // ✅ Setați toate origin-urile permise
+        corsConfig.setAllowedOrigins(Arrays.asList(
+                "https://www.paulayadeagro.online",
+                "http://localhost:3000"
+        ));
+
+        corsConfig.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With"
+        ));
+
+        corsConfig.setAllowedMethods(Arrays.asList(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+
         corsConfig.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
 
-        CorsFilter corsFilter = new CorsFilter(source);
-
-        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>(corsFilter);
+        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>(new CorsFilter(source));
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         return registrationBean;
@@ -35,7 +49,9 @@ public class SecurityConfig {
     public FilterRegistrationBean<FirebaseAuthenticationFilter> firebaseAuthenticationFilter() {
         FilterRegistrationBean<FirebaseAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new FirebaseAuthenticationFilter());
-        registrationBean.addUrlPatterns("/agrolink/farms/*"); // Specify the URL patterns to secure
+
+        // ✅ Listează rutele care au nevoie de autentificare
+        registrationBean.addUrlPatterns("/agrolink/farms/*");
         registrationBean.addUrlPatterns("/agrolink/clients/*");
         registrationBean.addUrlPatterns("/agrolink/carts/*");
         registrationBean.addUrlPatterns("/agrolink/cartItems/*");
@@ -45,6 +61,7 @@ public class SecurityConfig {
         registrationBean.addUrlPatterns("/agrolink/payments/*");
         registrationBean.addUrlPatterns("/agrolink/orderResponses/*");
         registrationBean.addUrlPatterns("/agrolink/fundsDistribs/*");
+
         return registrationBean;
     }
 
@@ -54,5 +71,4 @@ public class SecurityConfig {
         filterRegistrationBean.setFilter(new ForwardedHeaderFilter());
         return filterRegistrationBean;
     }
-
 }

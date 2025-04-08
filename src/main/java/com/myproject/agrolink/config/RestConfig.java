@@ -26,7 +26,7 @@ import com.myproject.agrolink.entity.OrderStatus;
 public class RestConfig implements RepositoryRestConfigurer {
 
     private String[] theAllowedOrigins = {
-            "https://d38gswnftydh5r.cloudfront.net",
+            "https://www.paulayadeagro.online",
             "http://localhost:3000"
     };
 
