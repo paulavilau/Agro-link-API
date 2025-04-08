@@ -1,5 +1,6 @@
 package com.myproject.agrolink.config;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,9 +14,12 @@ public class FirebaseInitializer {
     // FileInputStream serviceAccount = new FileInputStream(
     //     "./src/main/java/com/myproject/agrolink/config/serviceAccountKey.json");
 
-    InputStream serviceAccount = FirebaseInitializer.class
-        .getClassLoader()
-        .getResourceAsStream("serviceAccountKey.json");
+    String firebaseJson = System.getenv("FIREBASE_CREDENTIALS");
+    ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseJson.getBytes());
+
+    // InputStream serviceAccount = FirebaseInitializer.class
+    //     .getClassLoader()
+    //     .getResourceAsStream("serviceAccountKey.json");
 
     FirebaseOptions options = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
