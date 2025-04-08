@@ -1,2 +1,2 @@
-web: java -Xmx256m -jar target/agrolink-0.0.1-SNAPSHOT.jar
+web: java -Xmx384m -jar target/agrolink-0.0.1-SNAPSHOT.jar
 
