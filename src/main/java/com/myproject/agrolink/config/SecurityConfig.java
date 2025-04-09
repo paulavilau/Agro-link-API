@@ -50,8 +50,8 @@ public class SecurityConfig {
         FilterRegistrationBean<FirebaseAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new FirebaseAuthenticationFilter());
 
-        // ✅ Listează rutele care au nevoie de autentificare
-        registrationBean.addUrlPatterns("/agrolink/farms/*");
+        //  Listează rutele care au nevoie de autentificare
+        // registrationBean.addUrlPatterns("/agrolink/farms/*");
         registrationBean.addUrlPatterns("/agrolink/clients/*");
         registrationBean.addUrlPatterns("/agrolink/carts/*");
         registrationBean.addUrlPatterns("/agrolink/cartItems/*");
