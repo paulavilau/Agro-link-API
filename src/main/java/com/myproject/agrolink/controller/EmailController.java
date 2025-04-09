@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myproject.agrolink.requestmodel.EmailRequest;
-import com.myproject.agrolink.service.EmailService;
+import com.myproject.agrolink.service.MailgunService;
 
 
 import org.springframework.mail.MailException;
@@ -17,18 +17,19 @@ import org.springframework.mail.MailException;
 @RequestMapping("/agrolink/emails")
 public class EmailController {
 
+  private final MailgunService mailgunService;
 
-  private EmailService emailService;
-
-  public EmailController(EmailService emailService) {
-    this.emailService = emailService;
+  public EmailController(MailgunService mailgunService) {
+      this.mailgunService = mailgunService;
   }
 
-  @PostMapping("/sendEmail")
-  public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest) throws MailException {
-    emailService.sendEmail(emailRequest);
-
-    return new ResponseEntity<>(HttpStatus.OK);
-
+  @PostMapping("/test")
+  public ResponseEntity<String> sendTestEmail() {
+      mailgunService.sendSimpleEmail(
+          "vilaupaula@yahoo.com",
+          "Salut!",
+          "Acesta este un email trimis cu Mailgun și Java 🚀"
+      );
+      return ResponseEntity.ok("Email trimis!");
   }
 }
