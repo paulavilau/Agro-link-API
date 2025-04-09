@@ -16,8 +16,6 @@ import org.springframework.mail.MailException;
 @RestController
 @RequestMapping("/agrolink/emails")
 public class EmailController {
-
-
   private EmailService emailService;
 
   public EmailController(EmailService emailService) {
